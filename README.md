@@ -19,3 +19,5 @@
 [Tensorflow](http://playground.tensorflow.org)
 
 [Machine Learning Recipes](https://youtu.be/84gqSbLcBFE?list=PLOU2XLYxmsIIuiBfYad6rFYQU_jL2ryal) szczególnie interesujący jest koniec
+
+[O rozpoznawaniu cyfr z mnist przy użyciu sieci neuronowej](http://neuralnetworksanddeeplearning.com/chap1.html)
