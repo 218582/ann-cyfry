@@ -15,3 +15,7 @@
 [https://www.youtube.com/watch?v=cKxRvEZd3Mw](https://www.youtube.com/watch?v=cKxRvEZd3Mw)
 
 [Odczyt obrazków z mnist](http://cs.indstate.edu/~jkinne/cs475-f2011/code/mnistHandwriting.py)
+
+[Tensorflow](http://playground.tensorflow.org)
+
+[Machine Learning Recipes](https://youtu.be/84gqSbLcBFE?list=PLOU2XLYxmsIIuiBfYad6rFYQU_jL2ryal) szczególnie interesujący jest koniec
