@@ -9,7 +9,7 @@ class NeuralNet(object):
     ## Konstruktor sieci neuronowej
     # Użycie: 
     # \code {.py} net = NeuralNet([1,2,3]) \endcode
-    # \param[in] sizes tablica ilości neuronów w klejnych warstwach
+    # \param[in] sizes tablica ilości neuronów w kolejnych warstwach
     #
     # Konstruktor zawiera rowniez sposob reprezentacji sieci neuronowej
     # layers   - liczba warstw
@@ -29,6 +29,7 @@ class NeuralNet(object):
         
     ## Funkcja aktywacji neuronu sigmoidalnego:
     # y = 1 / (1+exp(- suma iloczynów wszystkich wag i wejść - bias neuronu))
+    #
     # zip(a, b) - tworzy iterator pozwalajacy na przejscie po kolejnych elementach a i b
     #             i wykonac operacje i-tego a z i-tym b. Zatrzymuje sie, gdy jedna ze struktur
     #             (a lub b) sie skonczy
@@ -38,6 +39,23 @@ class NeuralNet(object):
             a = sigmoid(np.dot(wght, inpt)+bs)
         return a
     
+
+
+
+import mnistHandwriting as mh
     
-    
+## Funkcja zwracająca cyfrę z bazy danych, przypisaną do danego obrazka z bazy
+def readTrueValFromMNIST(mnistExampleReturn):
+    trueValTable = []
+    for i in range(len(mnistExampleReturn)):
+        trueVal = mnistExampleReturn[i][1];
+        number = 0
+        while (trueVal[number] == 0):
+            number = number + 1
+        trueValTable.append(number)
+    return trueValTable
+
+# Test readTrueValFromMNIST
+#print(readTrueValFromMNIST(mh.MNISTexample(0,3,bTrain=True,only01=False)))
+#mh.writeMNISTimage(mh.MNISTexample(0,3,only01=False))
 
