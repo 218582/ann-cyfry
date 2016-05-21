@@ -1,3 +1,11 @@
+# Credits:
+# Jeff Kinne for CS 475 and 575 Artificial Intelligence offered in the fall of 2011
+# at Indiana State University
+# http://cs.indstate.edu/~jkinne/cs475-f2011/
+#
+# http://cs.indstate.edu/%7Ejkinne/cs475-f2011/code/mnistHandwriting.py
+
+
 from struct import *
 
 # This function reads data from the MNIST handwriting files.  To use this
