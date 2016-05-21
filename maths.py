@@ -3,6 +3,6 @@
 
 import numpy as np
 
-# funkcja sigmoidalna
+## funkcja sigmoidalna
 def sigmoid(exponent):
     return 1.0/(1.0+np.exp(exponent))

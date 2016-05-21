@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
+#Powyższa linia pozwala na wpisywanie polskich znaków
+
 #przyklad dolaczania modulu
 #wywolanie: python main.py
 
-import module #jak include w c++
+#import module #jak include w c++
 
-print "Hello World!"
-module.functionFromModule() #musi byc tak wywolane przy powyzszym typie zalaczenia
+#print "Hello World!"
+#module.functionFromModule() #musi byc tak wywolane przy powyzszym typie zalaczenia
 
 ##inny sposob zalaczenia:
 #from module import functionFromModule
@@ -16,6 +19,13 @@ module.functionFromModule() #musi byc tak wywolane przy powyzszym typie zalaczen
 
 
 """Przyklad wywolywania modulu mnistHandwriting.py"""
-from mnistHandwriting import *
+#from mnistHandwriting import *
 
-writeMNISTimage(MNISTexample(0,2,only01=False))
+#writeMNISTimage(MNISTexample(0,2,only01=False))
+
+
+################################################################################
+
+from ann import *
+
+
