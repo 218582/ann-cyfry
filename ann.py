@@ -36,6 +36,7 @@ class NeuralNet(object):
     # dot(x, y) - mnozenie macierzy
     def NeuronActivation (self,inpt):
         for bs, wght in zip(self.biases, self.weights):
-            a = sigmoid(np.dot(wght, inpt)+bs)
+            a = maths.sigmoid(np.dot(wght, inpt)+bs)
         return a
-
+    
+    

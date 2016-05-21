@@ -33,7 +33,7 @@ def readValueTableFromMNIST(mnistExampleReturn):
 ## Test readValueTableFromMNIST   
 #print(readValueTableFromMNIST(mh.MNISTexample(0,3,bTrain=True,only01=False)))
 
-## Funkcja tworzy tablicę tablic 28x28 reprezentujących obrazki
+## Funkcja tworzy listę tablic 28x28 reprezentujących obrazki
 def TableCreate(mnistExampleReturn):
     alltabs = []
     for i in range(len(mnistExampleReturn)):
