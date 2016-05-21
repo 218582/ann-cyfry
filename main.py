@@ -14,3 +14,8 @@ module.functionFromModule() #musi byc tak wywolane przy powyzszym typie zalaczen
 ##zeby w taki sposob zaimportowac wszystkie:
 #from module import *
 
+
+"""Przyklad wywolywania modulu mnistHandwriting.py"""
+from mnistHandwriting import *
+
+writeMNISTimage(MNISTexample(0,2,only01=False))
