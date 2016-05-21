@@ -14,7 +14,7 @@
 
 [https://www.youtube.com/watch?v=cKxRvEZd3Mw](https://www.youtube.com/watch?v=cKxRvEZd3Mw)
 
-[Odczyt obrazków z mnist](http://cs.indstate.edu/~jkinne/cs475-f2011/code/mnistHandwriting.py)
+[Odczyt obrazków z mnist](http://cs.indstate.edu/~jkinne/cs475-f2011/code/mnistHandwriting.py) Dodano do repo
 
 [Tensorflow](http://playground.tensorflow.org)
 
