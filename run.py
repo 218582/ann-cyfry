@@ -7,11 +7,11 @@ class Runnable:
     ## Konstruktor - przygotowuje i uczy sieć neuronową
     # \param [in] net_sizes lista wielkości warstw
     # \param [in] source_learningData dane do nauki sieci
-    # \param [in] era ilość epok testu
+    # \param [in] epochs ilość epok testu
     # \param [in] batch_size wielkość "mini_batch" do metody Stochastic Gradient Descent
     # \param [in] eta_speed prędkość uczenia
-    def __init__ (self, net_sizes, source_learningData, era, batch_size, eta_speed):
-        return 0;
+    def __init__ (self, net_sizes, source_learningData, epochs, batch_size, eta_speed):
+        return 0
         
     ##Uruchomienie testów trafności klasyfikacji
     # \param [in] source_testData dane do testów sieci
