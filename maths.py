@@ -13,3 +13,8 @@ def sigmoid(exponent):
 #plt.plot(testinput, sigmoid(testinput), linewidth=2)
 #plt.grid(1)
 #plt.show()
+
+##Pochodna funkcji sigmoidalnej
+# \retval derivative_sigmoid wynik
+def derivative_sigmoid(exponent):
+    return np.exp(-exponent)/((1+np.exp(-exponent))**2)

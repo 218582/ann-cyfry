@@ -45,19 +45,26 @@ class NeuralNet(object):
     #\retval activity Aktywność warstwy i
     #
     # np.dot(x, y) - mnozenie macierzy
-    def NeuronActivation (self,inpt,i):
+    def NeuronActivation(self,inpt,i):
         return maths.sigmoid(np.dot(inpt, self.weights[i]))
     
 
     ## Metoda przeprowadzająca propagację do przodu
     #\param[in] lista lista list z danymi wejściowymi
     #
-    #\warning lista wewnętrzna danych wejściowych musi zawierać tyle elementów, ile neuronów wejściowych posiada sieć
+    #\warning każda lista wewnętrzna danych wejściowych musi zawierać tyle elementów, 
+    #\warning ile neuronów wejściowych posiada sieć
     def forwardPropagation(self,inpt):
         an = inpt
         for i in range((self.layers-1)):
             an = self.NeuronActivation(an,i)
         return an
+        
+    ## Metoda wyliczająca funkcję kosztów
+    def costFunction(self, inpt, targt):
+        self.outp_estim = self.forwardPropagation(inpt)
+        J = 0.5*sum((targt-self.outp_estim)**2)
+        return J
 
 ##Test sieci        
 #NN = NeuralNet([2,3,1])
