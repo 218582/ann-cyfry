@@ -32,11 +32,14 @@ import stopwatch
 import read
 import mnistHandwriting as mh
 
-data_part = mh.MNISTexample(0,100,bTrain=True,only01=False)
+data_part = mh.MNISTexample(0,2,bTrain=True,only01=False)
 ##pierwsze indeksowanie  - po rekordach z baz
 #print data_part[0]
 ##drugie indeksowanie    - (znormalizowane piksele w wektorze), (lista 0-1 pozycji dla wyniku*)
 ## * [0,1,0,...,0] - wynikiem jest 1
-print len(data_part[0][0])
-#print data_part[0][1]
 
+### Testowanie sieci neuronowej
+import mnist_loader
+training_data, validation_data, test_data =  mnist_loader.load_data_wrapper()
+sn = NeuralNet([784, 30, 10])
+sn.SGD(training_data, 30, 10, 3.0, test_data = test_data )
