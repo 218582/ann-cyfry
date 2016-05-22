@@ -32,27 +32,49 @@ class NeuralNet(object):
         #Hyper-parameters
         self.layers = len(sizes)
         self.sizes = sizes
-        self.weights = [np.random.randn(self.sizes[i], self.sizes[i+1]) for i in range(self.layers-1)]
+        self.weights = [np.random.randn(self.sizes[i], self.sizes[i+1]) for i in range(0,(self.layers)-1)]
         
         
-    ## Funkcja aktywacji neuronu sigmoidalnego:
-    # y = 1 / (1+exp(- suma iloczynów wszystkich wag i wejść - bias neuronu))
+    ## Metoda aktywacji neuronu sigmoidalnego:
+    # y = 1 / (1+exp(- iloczyny wszystkich wag i wejść))
+    # zwraca activity i-tej warstwy połączeń
+    # i liczone od zera
     #
-    # zip(a, b) - tworzy iterator pozwalajacy na przejscie po kolejnych elementach a i b
-    #             i wykonac operacje i-tego a z i-tym b. Zatrzymuje sie, gdy jedna ze struktur
-    #             (a lub b) sie skonczy
-    # dot(x, y) - mnozenie macierzy
-    def NeuronActivation (self,inpt):
-        for wght in self.weights:
-            a = maths.sigmoid(np.dot(wght, inpt))
-        return a
+    #\param[in] inpt macierz wejściowa warstwy neuronów
+    #\param[in] i warstwa połączeń (indeks od 0)
+    #\retval activity Aktywność warstwy i
+    #
+    # np.dot(x, y) - mnozenie macierzy
+    def NeuronActivation (self,inpt,i):
+        return maths.sigmoid(np.dot(inpt, self.weights[i]))
     
+
+    ## Metoda przeprowadzająca propagację do przodu
+    #\param[in] lista lista list z danymi wejściowymi
+    #
+    #\warning lista wewnętrzna danych wejściowych musi zawierać tyle elementów, ile neuronów wejściowych posiada sieć
+    def forwardPropagation(self,inpt):
+        an = inpt
+        for i in range((self.layers-1)):
+            an = self.NeuronActivation(an,i)
+        return an
+
+##Test sieci        
+#NN = NeuralNet([2,3,1])
+#print NN.weights
+#print NN.layers
+##inp = np.random.rand(1,2)
+#input1 = [0.2, 0.4]
+#input2 = [0.3, 0.5]
+#inp = [input1, input2]
+#print "Input:"
+#print inp
+#val = NN.forwardPropagation(inp)
+#print "\n"
+#print val
+
     
-    
-    
-#NN = NeuralNet([3,5,2])
-#print NN.weights[0]
-#    
+
     
     
     
