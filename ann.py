@@ -4,8 +4,6 @@
 import numpy as np
 import random
 
-import maths
-
 class NeuralNet(object):
     
     ## Konstruktor sieci neuronowej
@@ -46,7 +44,7 @@ class NeuralNet(object):
     #
     # np.dot(x, y) - mnozenie macierzy
     def NeuronActivation(self,inpt,i):
-        return maths.sigmoid(np.dot(inpt, self.weights[i]))
+        return self.sigmoid(np.dot(inpt, self.weights[i]))
     
 
     ## Metoda przeprowadzająca propagację do przodu
@@ -66,6 +64,17 @@ class NeuralNet(object):
         J = 0.5*sum((targt-self.outp_estim)**2)
         return J
 
+    ## funkcja sigmoidalna
+    # \retval sigmoid wynik
+    def sigmoid(self, exponent):
+        return 1.0/(1.0+np.exp(-exponent))
+        
+    ##Pochodna funkcji sigmoidalnej
+    # \retval derivative_sigmoid wynik
+    def derivative_sigmoid(self,exponent):
+        return np.exp(-exponent)/((1+np.exp(-exponent))**2)
+        
+        
 ##Test sieci        
 #NN = NeuralNet([2,3,1])
 #print NN.weights
@@ -81,10 +90,14 @@ class NeuralNet(object):
 #print val
 
     
+    ## Funkcja zapisująca nauczone wagi
+    def saveWeights(self):
+        return 0
+        
 
-    
-    
-    
+##Funkcja wczytująca sieć
+def NetworkInitFromFile():
+    return 0
     
     
     
