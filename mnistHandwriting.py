@@ -1,3 +1,11 @@
+# Credits:
+# Jeff Kinne for CS 475 and 575 Artificial Intelligence offered in the fall of 2011
+# at Indiana State University
+# http://cs.indstate.edu/~jkinne/cs475-f2011/
+#
+# http://cs.indstate.edu/%7Ejkinne/cs475-f2011/code/mnistHandwriting.py
+
+
 from struct import *
 
 # This function reads data from the MNIST handwriting files.  To use this
@@ -103,7 +111,7 @@ def writeMNISTimage(T):
         im.save('mnistFile'+str(i)+'.bmp')
 
 # example of running the last function to write out some of the pictures.
-writeMNISTimage(MNISTexample(0,2,only01=False))
+#writeMNISTimage(MNISTexample(0,2,only01=False))
 
 
 # This if my function to do the learning on the MNIST handwriting
