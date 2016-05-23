@@ -5,9 +5,9 @@ import numpy as np
 import random
 
 class NeuralNet(object):
-    
+
     ## Konstruktor sieci neuronowej
-    # Użycie: 
+    # Użycie:
     # \code {.py} net = NeuralNet([1,2,3]) \endcode
     # \param[in] sizes tablica ilości neuronów w kolejnych warstwach
     #
@@ -23,16 +23,16 @@ class NeuralNet(object):
     #               [ ..., ..., ..., ...]]
     # w13        - połączenie neuronu 1 warstwy 1 z neuronem 3 warstwy 2
     # weights[n] - macierz wag połączeń między warstwą n+1 a warstwą n+2 (liczymy n od zera)
-    #              więc weights[1] łączy warstwę drugą z trzecią (pierwsza warstwa - 
-    #              wejściowa to warstwa "pierwsza") 
-    
+    #              więc weights[1] łączy warstwę drugą z trzecią (pierwsza warstwa -
+    #              wejściowa to warstwa "pierwsza")
+
     def __init__ (self, sizes):
         #Hyper-parameters
         self.layers = len(sizes)
         self.sizes = sizes
         self.weights = [np.random.randn(self.sizes[i], self.sizes[i+1]) for i in range(0,(self.layers)-1)]
-        
-        
+
+
     ## Metoda aktywacji neuronu sigmoidalnego:
     # y = 1 / (1+exp(- iloczyny wszystkich wag i wejść))
     # zwraca activity i-tej warstwy połączeń
@@ -45,19 +45,19 @@ class NeuralNet(object):
     # np.dot(x, y) - mnozenie macierzy
     def NeuronActivation(self,inpt,i):
         return self.sigmoid(np.dot(inpt, self.weights[i]))
-    
+
 
     ## Metoda przeprowadzająca propagację do przodu
     #\param[in] lista lista list z danymi wejściowymi
     #
-    #\warning każda lista wewnętrzna danych wejściowych musi zawierać tyle elementów, 
+    #\warning każda lista wewnętrzna danych wejściowych musi zawierać tyle elementów,
     #\warning ile neuronów wejściowych posiada sieć
     def forwardPropagation(self,inpt):
         an = inpt
         for i in range((self.layers-1)):
             an = self.NeuronActivation(an,i)
         return an
-        
+
     ## Metoda wyliczająca funkcję kosztów
     def costFunction(self, inpt, targt):
         self.outp_estim = self.forwardPropagation(inpt)
@@ -68,14 +68,14 @@ class NeuralNet(object):
     # \retval sigmoid wynik
     def sigmoid(self, exponent):
         return 1.0/(1.0+np.exp(-exponent))
-        
+
     ##Pochodna funkcji sigmoidalnej
     # \retval derivative_sigmoid wynik
     def derivative_sigmoid(self,exponent):
         return np.exp(-exponent)/((1+np.exp(-exponent))**2)
-        
-        
-##Test sieci        
+
+
+##Test sieci
 #NN = NeuralNet([2,3,1])
 #print NN.weights
 #print NN.layers
@@ -89,23 +89,13 @@ class NeuralNet(object):
 #print "\n"
 #print val
 
-    
-    ## Funkcja zapisująca nauczone wagi
-    def saveWeights(self):
-        return 0
-        
 
-##Funkcja wczytująca sieć
-def NetworkInitFromFile():
-    return 0
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+#     ## Funkcja zapisująca nauczone wagi
+#     def saveWeights(self):
+#         return 0
+#
+#
+# ##Funkcja wczytująca sieć
+# def NetworkInitFromFile():
+#     return 0
+#
