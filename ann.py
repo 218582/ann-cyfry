@@ -3,6 +3,7 @@
 
 import numpy as np
 import random
+import mnistHandwriting as mh
 
 class NeuralNet(object):
 
@@ -28,7 +29,7 @@ class NeuralNet(object):
 
     def __init__ (self, sizes):
         #Hyper-parameters
-        self.num_layers = len(sizes)
+        self.layers = len(sizes)
         self.sizes = sizes
         self.weights = [np.random.randn(self.sizes[i], self.sizes[i+1]) for i in range(0,(self.layers)-1)]
 
@@ -75,26 +76,26 @@ class NeuralNet(object):
         return np.exp(-exponent)/((1+np.exp(-exponent))**2)
 
 
-##Test sieci
-#NN = NeuralNet([2,3,1])
-#print NN.weights
-#print NN.layers
-##inp = np.random.rand(1,2)
-#input1 = [0.2, 0.4]
-#input2 = [0.3, 0.5]
-#inp = [input1, input2]
-#print "Input:"
-#print inp
-#val = NN.forwardPropagation(inp)
-#print "\n"
-#print val
+# ##Test sieci
+# NN = NeuralNet([784,30,10])
+# #print NN.weights
+# #print NN.layers
+# inp = mh.MNISTexample(0,1,only01=False)
+# # input1 = [0.2, 0.4]
+# # input2 = [0.3, 0.5]
+# # inp = [input1, input2]
+# print "Input:"
+# print inp
+# val = NN.forwardPropagation(inp[0][0])
+# print "\n"
+# print val
 
-
-    ## Funkcja zapisująca nauczone wagi
-    def saveWeights(self):
-        return 0
-
-
-##Funkcja wczytująca sieć
-def NetworkInitFromFile():
-    return 0
+#
+#     ## Funkcja zapisująca nauczone wagi
+#     def saveWeights(self):
+#         return 0
+#
+#
+# ##Funkcja wczytująca sieć
+# def NetworkInitFromFile():
+#     return 0
