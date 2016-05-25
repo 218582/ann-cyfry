@@ -69,7 +69,8 @@ class NeuralNet(object):
     def derivative_costFunction(self, inpt, targt):
         self.OUTPUT = self.forwardPropagation(inpt)
         d2 = np.multiply(-(targt - self.OUTPUT), self.derivative_sigmoid(self.Z2))
-        dJdW1 = np.dot(self.transpose(self.A1), d2)
+        # dJdW1 = np.dot(self.transpose(self.A1), d2)
+        dJdW1 = np.dot(self.A1.T, d2)
         d1 = np.multiply(np.dot(d2, self.transpose(self.weights[1])), self.derivative_sigmoid(self.Z1))
         dJdW0 = np.dot(self.transpose(inpt), d1)
         return dJdW0, dJdW1
@@ -89,11 +90,17 @@ class NeuralNet(object):
     def derivative_sigmoid(self,exponent):
         return np.exp(-exponent)/((1+np.exp(-exponent))**2)
 
-    
+    def getParams(self):
+        params = np.concatenate((self.weights[0].ravel(), self.weights[1].ravel()))
+        return params
 
-
-
-
+    def setParams(self, params):
+        #Set W1 and W2 using single paramater vector.
+        W0_start = 0
+        W0_end = self.sizes[1] * self.sizes[0]
+        self.weights[0] = np.reshape(params[W0_start:W0_end], (self.sizes[0] , self.sizes[1]))
+        W1_end = W0_end + self.sizes[1]*self.sizes[2]
+        self.W1 = np.reshape(params[W0_end:W1_end], (self.sizes[1], self.sizes[2]))
 
 
 
@@ -123,28 +130,28 @@ class NeuralNet(object):
 
 
 # ## Test sieci
-# NN = NeuralNet([2,3,1])
-# print NN.weights
+NN = NeuralNet([2,3,1])
+print NN.weights
 # print NN.layers
 # #inp = np.random.rand(1,2)
 # input1 = [0.2, 0.4]
 # input2 = [0.3, 0.5]
 # input3 = [0.1, 0.5]
 # inp = [input1, input2, input3]
-# print "Input:"
-# print inp
+# # print "Input:"
+# # print inp
 # out = [[0.3], [0.4], [0.3]]
-#
+# #
 # val = NN.forwardPropagation(inp)
-#
+# #
 # costf1 = NN.costFunction(inp, out)
-# print "CostFunction1:"
-# print costf1
+# # print "CostFunction1:"
+# # print costf1
 # dJdW0, dJdW1 = NN.derivative_costFunction(inp, out)
 # NN.weights[0] = NN.weights[0] - 2*dJdW0
 # NN.weights[1] = NN.weights[1] - 2*dJdW1
 # costf2 = NN.costFunction(inp, out)
-# print "CostFunction2:"
+# # print "CostFunction2:"
 # print costf2
 # while (costf2 < costf1):
 #     costf1 = NN.costFunction(inp, out)
@@ -158,5 +165,9 @@ class NeuralNet(object):
 #     print costf2
 # print "\n"
 # print val
-# # deriv = NN.derivative_costFunction(inp, tgt)
+# deriv = NN.derivative_costFunction(inp, tgt)
 # # print deriv
+print
+print
+print
+print NN.getParams()
