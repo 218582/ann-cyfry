@@ -90,11 +90,11 @@ class NeuralNet(object):
     def derivative_sigmoid(self,exponent):
         return np.exp(-exponent)/((1+np.exp(-exponent))**2)
 
-    def getParams(self):
+    def getParameters(self):
         params = np.concatenate((self.weights[0].ravel(), self.weights[1].ravel()))
         return params
 
-    def setParams(self, params):
+    def setParameters(self, params):
         #Set W1 and W2 using single paramater vector.
         W0_start = 0
         W0_end = self.sizes[1] * self.sizes[0]
@@ -102,72 +102,99 @@ class NeuralNet(object):
         W1_end = W0_end + self.sizes[1]*self.sizes[2]
         self.W1 = np.reshape(params[W0_end:W1_end], (self.sizes[1], self.sizes[2]))
 
+    def computeGradients(self, inpt, out):
+        dJdW1, dJdW2 = self.derivative_costFunction(inpt, out)
+        return np.concatenate((dJdW1.ravel(), dJdW2.ravel()))
 
+# NeuralNet END
 
+from scipy import optimize
 
+class TrainNetwork(object):
+    def __init__(self, Neuralnet):
+        self.Neuralnet = Neuralnet
 
+    def callbackFunction(self, parameters):
+        self.Neuralnet.setParameters(parameters)
+        self.J.append(self.Neuralnet.costFunction(self.I, self.O))
 
+    def WrapperCostFunction(self, parameters, inpt, out):
+        self.Neuralnet.setParameters(parameters)
+        cost = self.Neuralnet.costFunction(inpt, out)
+        grad = self.Neuralnet.computeGradients(inpt,out)
+        return cost, grad
 
+    def train(self, inpt, out):
+        self.I = inpt
+        self.O = out
 
+        self.J = []
 
+        startParameters = self.Neuralnet.getParameters()
 
+        options = {'maxiter': 200, 'disp' : True}
+        results = optimize.minimize(self.WrapperCostFunction, startParameters, jac=True, method='BFGS', args=(inpt, out), options=options, callback=self.callbackFunction)
 
+        self.Neuralnet.setParameters(results.x)
+        self.optimizationResults = results
 
+def Liczba (tablica):
+    number = 0
+    while (tablica[number] == 0):
+        number = number + 1
+    return number
 
+def ListaObrazkow (ile, dane):
+    lista = []
+    for i in range(ile):
+        lista.append(dane[i][0])
+    return lista
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ## Test sieci
-NN = NeuralNet([2,3,1])
-print NN.weights
-# print NN.layers
-# #inp = np.random.rand(1,2)
-# input1 = [0.2, 0.4]
-# input2 = [0.3, 0.5]
-# input3 = [0.1, 0.5]
-# inp = [input1, input2, input3]
-# # print "Input:"
-# # print inp
-# out = [[0.3], [0.4], [0.3]]
-# #
-# val = NN.forwardPropagation(inp)
-# #
-# costf1 = NN.costFunction(inp, out)
-# # print "CostFunction1:"
-# # print costf1
-# dJdW0, dJdW1 = NN.derivative_costFunction(inp, out)
-# NN.weights[0] = NN.weights[0] - 2*dJdW0
-# NN.weights[1] = NN.weights[1] - 2*dJdW1
-# costf2 = NN.costFunction(inp, out)
-# # print "CostFunction2:"
-# print costf2
-# while (costf2 < costf1):
-#     costf1 = NN.costFunction(inp, out)
-#     print "CostFunction1:"
-#     print costf1
-#     dJdW0, dJdW1 = NN.derivative_costFunction(inp, out)
-#     NN.weights[0] = NN.weights[0] - 2*dJdW0
-#     NN.weights[1] = NN.weights[1] - 2*dJdW1
-#     costf2 = NN.costFunction(inp, out)
-#     print "CostFunction2:"
-#     print costf2
-# print "\n"
-# print val
-# deriv = NN.derivative_costFunction(inp, tgt)
-# # print deriv
-print
-print
-print
-print NN.getParams()
+NN = NeuralNet([784,100,10])
+data_part = mh.MNISTexample(0,100,bTrain=True,only01=False)
+T = TrainNetwork(NN)
+T.train(inp,out)
+wynik = NN.forwardPropagation("""obraze""")
+print Liczba(wynik)
+# # ## Test sieci
+# NN = NeuralNet([2,3,1])
+# print NN.weights
+# # print NN.layers
+# # #inp = np.random.rand(1,2)
+# # input1 = [0.2, 0.4]
+# # input2 = [0.3, 0.5]
+# # input3 = [0.1, 0.5]
+# # inp = [input1, input2, input3]
+# # # print "Input:"
+# # # print inp
+# # out = [[0.3], [0.4], [0.3]]
+# # #
+# # val = NN.forwardPropagation(inp)
+# # #
+# # costf1 = NN.costFunction(inp, out)
+# # # print "CostFunction1:"
+# # # print costf1
+# # dJdW0, dJdW1 = NN.derivative_costFunction(inp, out)
+# # NN.weights[0] = NN.weights[0] - 2*dJdW0
+# # NN.weights[1] = NN.weights[1] - 2*dJdW1
+# # costf2 = NN.costFunction(inp, out)
+# # # print "CostFunction2:"
+# # print costf2
+# # while (costf2 < costf1):
+# #     costf1 = NN.costFunction(inp, out)
+# #     print "CostFunction1:"
+# #     print costf1
+# #     dJdW0, dJdW1 = NN.derivative_costFunction(inp, out)
+# #     NN.weights[0] = NN.weights[0] - 2*dJdW0
+# #     NN.weights[1] = NN.weights[1] - 2*dJdW1
+# #     costf2 = NN.costFunction(inp, out)
+# #     print "CostFunction2:"
+# #     print costf2
+# # print "\n"
+# # print val
+# # deriv = NN.derivative_costFunction(inp, tgt)
+# # # print deriv
+# print
+# print
+# print
+# print NN.getParams()

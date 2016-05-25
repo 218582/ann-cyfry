@@ -26,10 +26,10 @@
 
 ################################################################################
 
-from ann import *
-import run
-import stopwatch
-import read
+#from ann import *
+#import run
+#import stopwatch
+#import read
 import mnistHandwriting as mh
 
 data_part = mh.MNISTexample(0,100,bTrain=True,only01=False)
@@ -39,4 +39,3 @@ print data_part[0][1]
 ## * [0,1,0,...,0] - wynikiem jest 1
 print len(data_part[0][0])
 #print data_part[0][1]
-
