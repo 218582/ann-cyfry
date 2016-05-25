@@ -25,24 +25,86 @@
 #
 #     sys.exit (app.exec_())
 
+### PyGame
+import sys, pygame
+from pygame.locals import *
+from PIL import Image, ImageFilter
 
-### GUI wygenerowane z QtDesignera
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREY = (180, 180, 180)
 
-import sys
-from PyQt4 import QtCore, QtGui
+OUTPUT_IMAGE_SIZE = (28, 28)
 
-from test_gui import Ui_Form
+PAINT_SIZE = (20*OUTPUT_IMAGE_SIZE[0], 20*OUTPUT_IMAGE_SIZE[1] )
+RESULT_HEIGHT = 150
+WINDOW_SIZE = (PAINT_SIZE[0], PAINT_SIZE[1] + RESULT_HEIGHT)
 
+class Painter(object):
 
-class MyForm(QtGui.QMainWindow):
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
-        self.ui = Ui_Form()
-        self.ui.setupUi(self)
+    ## Inicjalizuje wygląd okna
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode(WINDOW_SIZE)
+        self.paintScreen = self.screen.subsurface( pygame.Rect((0,0), PAINT_SIZE) )
+        self.resultScreen = self.screen.subsurface( pygame.Rect((0, PAINT_SIZE[1]),(WINDOW_SIZE[0], RESULT_HEIGHT) ) )
 
+        self.screen.fill(WHITE)
+        self.resultScreen.fill(GREY)
+        self.drawBorders()
+        pygame.display.flip()
+        self.fps = 0
+        self.running = True
+		self.clock = pygame.time.Clock()
+		self.size = WINDOW_SIZE
+
+    def drawBorders(self):
+        pygame.draw.line(self.screen, BLACK, (0, PAINT_SIZE[1]), (WINDOW_SIZE[0], PAINT_SIZE[1]), 2)
+
+    def handleEvents(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTOMDOWN:
+                self.paintCircle(event.pos)
+
+    def isInPaintScreen(self, pos, error=(0, 0)):
+        x, y = pos
+        dx, dy = error
+        if x - dx < PAINT_SIZE[0] and y - dy < PAINT_SIZE[1]:
+            return True
+        else:
+            return False
+
+	def paintCircle(self, pos):
+		pygame.draw.circle(self.paintScreen, BLACK, pos, self.lineWidth/2)
+
+	def mainLoop (self, fps=0):
+		self.fps = fps
+		while self.running:
+			self.handleEvents()
+			pygame.display.flip()
+			self.clock.tick(self.fps)
+
+    #
+
+	# def handleEvents(self):
+    #     for event in pygame.event.get():
+    #     	if event.type == pygame.QUIT:
+    #     		self.running = False
+    #     	elif event.type == pygame.KEYDOWN:
+    #     		self.keyDown(event.key)
+    #     	elif event.type == pygame.KEYUP:
+    #     		if event.key == pygame.K_ESCAPE:
+    #     			self.running = False
+    #     		self.keyUp(event.key)
+    #     	elif event.type == pygame.MOUSEBUTTONUP:
+    #     		self.mouseUp(event.button, event.pos)
+    #     	elif event.type == pygame.MOUSEBUTTONDOWN:
+    #     		self.mouseDown(event.button, event.pos)
+    #     	elif event.type == pygame.MOUSEMOTION:
+    #     		self.mouseMotion(event.buttons, event.pos, event.rel)
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
-    myapp = MyForm()
-    myapp.show()
-    sys.exit(app.exec_())
+    gui = Painter()
+    gui.mainLoop(40)
