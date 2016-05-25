@@ -3,6 +3,7 @@
 
 import numpy as np
 import random
+import mnistHandwriting as mh
 
 class NeuralNet(object):
 
@@ -71,14 +72,14 @@ class NeuralNet(object):
         d2 = np.multiply(-(targt - self.OUTPUT), self.derivative_sigmoid(self.Z2))
         # dJdW1 = np.dot(self.transpose(self.A1), d2)
         dJdW1 = np.dot(self.A1.T, d2)
-        d1 = np.multiply(np.dot(d2, self.transpose(self.weights[1])), self.derivative_sigmoid(self.Z1))
-        dJdW0 = np.dot(self.transpose(inpt), d1)
+        d1 = np.multiply(np.dot(d2, self.weights[1].T), self.derivative_sigmoid(self.Z1))
+        dJdW0 = np.dot(inpt.T, d1)
         return dJdW0, dJdW1
 
     ##Dokonuje transpozycji macierzy
     # \retval macierz po transpozycji
-    def transpose(self, matrix):
-        return [list(i) for i in zip(*matrix)]
+    # def transpose(self, matrix):
+    #     return [list(i) for i in zip(*matrix)]
 
     ## funkcja sigmoidalna
     # \retval sigmoid wynik
@@ -141,35 +142,69 @@ class TrainNetwork(object):
 def Liczba (tablica):
     number = 0
     while (tablica[number] == 0):
-        number = number + 1
+        number +=1
     return number
 
 def ListaObrazkow (ile, dane):
-    lista = []
+    ret = np.array([np.zeros(784)],dtype=float)
     for i in range(ile):
-        lista.append(dane[i][0])
-    return lista
+        ret = np.append(ret,[dane[i][0]], axis=0)
+    ret = np.delete(ret,0,0)
+    return ret
 
-NN = NeuralNet([784,100,10])
-data_part = mh.MNISTexample(0,100,bTrain=True,only01=False)
-T = TrainNetwork(NN)
-T.train(inp,out)
-wynik = NN.forwardPropagation("""obraze""")
-print Liczba(wynik)
+def ListaWynikow (ile, dane):
+    ret = np.array([np.zeros(10)],dtype=float)
+    for i in range(ile):
+        ret = np.append(ret,[dane[i][1]], axis=0)
+    ret = np.delete(ret,0,0)
+    return ret
+
+
+# NN = NeuralNet([784,10,10])
+# data_part = mh.MNISTexample(0,100,bTrain=True,only01=False)
+# listao = ListaObrazkow(1,data_part)
+# listaw = ListaWynikow(1,data_part)
+# T = TrainNetwork(NN)
+# T.train(listao[0],listaw[0])
+
+NN = NeuralNet([2,10,1])
+# wynik = NN.forwardPropagation(data_part[0][0])
+# print Liczba(wynik)
 # # ## Test sieci
-# NN = NeuralNet([2,3,1])
 # print NN.weights
 # # print NN.layers
 # # #inp = np.random.rand(1,2)
-# # input1 = [0.2, 0.4]
-# # input2 = [0.3, 0.5]
-# # input3 = [0.1, 0.5]
-# # inp = [input1, input2, input3]
+# inp = []
+inp = np.array([np.zeros(2)],dtype=float)
+input1 = [0.2, 0.4]
+input2 = [0.3, 0.5]
+input3 = [0.1, 0.5]
+inp = np.append(inp,[input1], axis=0)
+inp = np.append(inp,[input2], axis=0)
+inp = np.append(inp,[input3], axis=0)
+inp = np.delete(inp,0,0)
+# inp.append(input1)
+# inp.append(input2)
+# inp.append(input3)
+# inp = [input1, input2, input3]
 # # # print "Input:"
-# # # print inp
-# # out = [[0.3], [0.4], [0.3]]
+print inp
+out = np.array([np.zeros(1)],dtype=float)
+out1 = [0.3]
+out2 = [0.4]
+out3 = [0.3]
+out = np.append(out,[out1], axis=0)
+out = np.append(out,[out2], axis=0)
+out = np.append(out,[out3], axis=0)
+out = np.delete(out,0,0)
+
+print out
+
+# out = [[0.3], [0.4], [0.3]]
 # # #
-# # val = NN.forwardPropagation(inp)
+# val = NN.forwardPropagation(inp)
+T = TrainNetwork(NN)
+T.train(inp,out)
 # # #
 # # costf1 = NN.costFunction(inp, out)
 # # # print "CostFunction1:"

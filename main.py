@@ -38,4 +38,5 @@ print data_part[0][1]
 ##drugie indeksowanie    - (znormalizowane piksele w wektorze), (lista 0-1 pozycji dla wyniku*)
 ## * [0,1,0,...,0] - wynikiem jest 1
 print len(data_part[0][0])
+print data_part[0][0]
 #print data_part[0][1]
