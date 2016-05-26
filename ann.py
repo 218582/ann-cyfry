@@ -145,6 +145,6 @@ def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
 
-#NN = NeuralNet([3,5,2])
-#print NN.weights[0]
+NN = NeuralNet([3,2,3])
+print NN.biases[0]
 #
