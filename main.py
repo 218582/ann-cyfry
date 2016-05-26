@@ -42,4 +42,6 @@ print data_part[0][1]
 import mnist_loader
 training_data, validation_data, test_data =  mnist_loader.load_data_wrapper()
 sn = NeuralNet([784, 30, 10])
-sn.SGD(training_data, 30, 10, 3.0, test_data = test_data )
+sn.SGD(training_data, 1, 10, 3.0, test_data = test_data )
+print test_data[0][0]
+sn.feedforward(training_data[0][0].ravel())
