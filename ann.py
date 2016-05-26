@@ -6,6 +6,7 @@
 import random
 import numpy as np
 
+##Klasa definiująca sieć neuronową
 class NeuralNet(object):
 
     ## Konstruktor
@@ -107,7 +108,7 @@ class NeuralNet(object):
         return sum(int(x == y) for (x, y) in test_results)
 
     ##Metoda oblicza pochodną funkcji kosztów
-    # \param [in] aktywacje wszytskich neuronów - wyjście sieci
+    # \param [in] aktywacje wszystkich neuronów - wyjście sieci
     # \param [in] oczekiwane wyjście
     # \retval pochodna funkcji kosztów
     def cost_derivative(self, output_activations, y):
