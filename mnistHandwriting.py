@@ -68,7 +68,7 @@ def MNISTexample(startN,howMany,bTrain=True,only01=False):
     fLabels.seek(8+startN)
 
     T = [] # list of (input, correct label) pairs
-    
+
     for blah in range(0, howMany):
         # get the input from the image file
         x = []
@@ -87,7 +87,7 @@ def MNISTexample(startN,howMany,bTrain=True,only01=False):
         # correct label.
         if not only01 or y[0]==1 or y[1]==1:
             T.append((x,y))
-            
+
     fImages.close()
     fLabels.close()
 
@@ -143,7 +143,7 @@ def learnMNIST():
     # go through each of those things in T, run feedforward to see
     # what it ends up with on the example, and keep a count of how many
     # it got correct.  For mine, it got 22 out of 22 correct.  For other
-    # examples I tried from the test and training files, it seemed to 
+    # examples I tried from the test and training files, it seemed to
     # be normally getting about 80% correct.  This could probably be made
     # higher by experimenting with how many hidden nodes to use, how many
     # levels to use, and training on more examples.
@@ -155,4 +155,3 @@ def learnMNIST():
         elif y[1]==1 and a[2][1] > a[2][0]: correct += 1
     print('Total examples tried: ' + str(len(T)))
     print('Total correct: ' + str(correct))
-        

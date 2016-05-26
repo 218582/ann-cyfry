@@ -145,6 +145,18 @@ def sigmoid_prime(z):
     """Derivative of the sigmoid function."""
     return sigmoid(z)*(1-sigmoid(z))
 
-NN = NeuralNet([3,2,3])
-print NN.biases[0]
-#
+import mnistHandwriting as mh
+import mnist_loader
+# Wczytanie danych (troche to trwa) oraz inicjalizacja sieci
+training_data, validation_data, test_data =  mnist_loader.load_data_wrapper()
+NN = NeuralNet ([784, 30, 10])
+#  Szybki trening
+NN.SGD(training_data, 1, 10, 3.0, test_data = test_data )
+# Sprawdzenie, do feedforward przekazujemy tylko sam obrazek w formie dlugiego
+# wektora kolumny, wyswietlane wyjscie
+print NN.feedforward(test_data[0][0])
+#  Tutaj sa wyswietlane prawidlowe wyniki
+print test_data[0][1]
+
+#  Są to te samo abrazki co pobiera mnistHandwriting, pod indeksem 0 rzeczywiscie jest 7
+mh.writeMNISTimage(mh.MNISTexample (0,2, bTrain = False, only01 = False))
