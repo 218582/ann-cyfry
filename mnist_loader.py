@@ -1,3 +1,5 @@
+#Za: Michael A. Nielsen, "Neural Networks and Deep Learning", Determination Press, 2015
+
 """
 mnist_loader
 ~~~~~~~~~~~~
