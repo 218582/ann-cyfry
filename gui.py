@@ -17,6 +17,9 @@ class MyForm(QtGui.QMainWindow):
         self.brush = QtGui.QBrush(QtCore.Qt.white)
         self.painter = QtGui.QPainter(self.canvas)
         self.painter.setBrush(self.brush)
+        self.painter.setPen(QtCore.Qt.NoPen)
+        self.scene.addPixmap(self.canvas)
+        self.ui.display.setScene(self.scene)
 
     def endPainter(self):
         self.painter.end()
@@ -35,26 +38,34 @@ class MyForm(QtGui.QMainWindow):
         self.scene.addPixmap(self.canvas)
         self.ui.display.setScene(self.scene)
 
+    def initTimer(self, ms, handler):
+        self.timer = QtCore.QTimer()
+        self.timer.setInterval(ms)
+        QtCore.QObject.connect(self.timer, QtCore.SIGNAL("timeout()"), handler)
+
     def __del__(self):
         self.endPainter()
 
-def printPos():
-    print QtGui.QGraphicsSceneMouseEvent.pos()
+
+
+def Pos():
+    pozycja = myapp.ui.display.mapFromGlobal(QtGui.QCursor.pos())
+    if pozycja.x() < myapp.ui.display.width() and pozycja.y() < myapp.ui.display.height():
+        myapp.drawCircle(pozycja)
+
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     myapp = MyForm()
     # #Rysowanie
-    punkt = QtCore.QPoint(200,200)
-    myapp.drawCircle(punkt)
+    # punkt = QtCore.QPoint(200,200)
+    # myapp.drawCircle(punkt)
     # #/Rysowanie
     # # Wyswietlanie
     # myapp.displayImage("mnistFile0.bmp")
     # # /Wyswietlanie
     # Uzywanie timera
-    timer = QtCore.QTimer()
-    timer.setInterval(5000)
-    QtCore.QObject.connect(timer, QtCore.SIGNAL("timeout()"), printPos)
-    timer.start()
+    myapp.initTimer(20, Pos)
+    myapp.timer.start()
     # /Uzywanie timera
     myapp.show()
     sys.exit(app.exec_())

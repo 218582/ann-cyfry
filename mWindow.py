@@ -32,7 +32,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.display = QtGui.QGraphicsView(self.centralwidget)
         self.display.setGeometry(QtCore.QRect(30, 30, 422, 422))
-        self.display.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.CrossCursor))
+        # self.display.viewport().setProperty("cursor", QtGui.QCursor(QtCore.Qt.CrossCursor))
         self.display.setObjectName(_fromUtf8("display"))
         self.next = QtGui.QCommandLinkButton(self.centralwidget)
         self.next.setGeometry(QtCore.QRect(260, 470, 185, 41))
