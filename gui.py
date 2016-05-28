@@ -38,6 +38,8 @@ class MyForm(QtGui.QMainWindow):
     def __del__(self):
         self.endPainter()
 
+def printPos():
+    print QtGui.QGraphicsSceneMouseEvent.pos()
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     myapp = MyForm()
@@ -51,8 +53,8 @@ if __name__ == "__main__":
     # Uzywanie timera
     timer = QtCore.QTimer()
     timer.setInterval(5000)
-    QtCore.QObject.connect(timer, QtCore.SIGNAL("timeout()"), myapp.clearDisplay)
+    QtCore.QObject.connect(timer, QtCore.SIGNAL("timeout()"), printPos)
     timer.start()
-    # myapp.clearDisplay()
+    # /Uzywanie timera
     myapp.show()
     sys.exit(app.exec_())
