@@ -21,9 +21,18 @@ class MyForm(QtGui.QMainWindow):
     def endPainter(self):
         self.painter.end()
 
-    def displayImage (self, name):
+    def displayImage(self, name):
         self.ui.display.resetCachedContent()
         self.scene.addPixmap(QtGui.QPixmap(name).scaled(420,420))
+        self.ui.display.setScene(self.scene)
+
+    def clearDisplay(self):
+        self.scene.clear()
+        self.ui.display.setScene(self.scene)
+
+    def drawCircle(self, point):
+        self.painter.drawEllipse(point.x(), point.y(), 20, 20)
+        self.scene.addPixmap(self.canvas)
         self.ui.display.setScene(self.scene)
 
     def __del__(self):
@@ -33,13 +42,17 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     myapp = MyForm()
     # #Rysowanie
-    # myapp.painter.drawEllipse(210, 210, 20, 20)
-    # myapp.scene.addPixmap(myapp.canvas)
-    # myapp.ui.display.setScene(myapp.scene)
-    # myapp.ui.display.resetCachedContent()
+    punkt = QtCore.QPoint(200,200)
+    myapp.drawCircle(punkt)
     # #/Rysowanie
     # # Wyswietlanie
     # myapp.displayImage("mnistFile0.bmp")
     # # /Wyswietlanie
+    # Uzywanie timera
+    timer = QtCore.QTimer()
+    timer.setInterval(5000)
+    QtCore.QObject.connect(timer, QtCore.SIGNAL("timeout()"), myapp.clearDisplay)
+    timer.start()
+    # myapp.clearDisplay()
     myapp.show()
     sys.exit(app.exec_())
