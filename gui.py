@@ -10,7 +10,10 @@ class MyForm(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.scene = QtGui.QGraphicsScene()
+        self.show()
+        self.ui.display.viewport().installEventFilter(self)
         self.initPainter()
+        self.LeftButtonPressed = False
 
     def initPainter(self):
         self.canvas = QtGui.QPixmap(420,420)
@@ -43,6 +46,24 @@ class MyForm(QtGui.QMainWindow):
         self.timer.setInterval(ms)
         QtCore.QObject.connect(self.timer, QtCore.SIGNAL("timeout()"), handler)
 
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.LeftButton:
+            self.LeftButtonPressed = True
+            self.drawLoop()
+            self.initTimer(0,self.drawLoop)
+            self.timer.start()
+
+    def drawLoop(self):
+        pozycja = self.ui.display.mapFromGlobal(QtGui.QCursor.pos())
+        if pozycja.x() < myapp.ui.display.width() and pozycja.y() < myapp.ui.display.height():
+            self.drawCircle(pozycja)
+
+    def eventFilter(self, source, event):
+        if event.type() == QtCore.QEvent.MouseButtonRelease and source is self.ui.display.viewport():
+            self.LeftButtonPressed = False
+            self.timer.stop()
+        return QtGui.QWidget.eventFilter(self, source, event)
+
     def __del__(self):
         self.endPainter()
 
@@ -52,6 +73,10 @@ def Pos():
     pozycja = myapp.ui.display.mapFromGlobal(QtGui.QCursor.pos())
     if pozycja.x() < myapp.ui.display.width() and pozycja.y() < myapp.ui.display.height():
         myapp.drawCircle(pozycja)
+
+def printClickedPos():
+    if QtGui.QMouseEvent.button() == QtCore.Qt.MouseButton.LeftButton:
+        print myapp.ui.display.mapFromGlobal(QtGui.QCursor.pos())
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
@@ -64,8 +89,8 @@ if __name__ == "__main__":
     # myapp.displayImage("mnistFile0.bmp")
     # # /Wyswietlanie
     # Uzywanie timera
-    myapp.initTimer(20, Pos)
-    myapp.timer.start()
+    # myapp.initTimer(20, Pos)
+    # myapp.timer.start()
     # /Uzywanie timera
-    myapp.show()
     sys.exit(app.exec_())
+            # print "Trzymasz"
