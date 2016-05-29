@@ -52,7 +52,11 @@ class MyForm(QtGui.QMainWindow):
 
     def checkDigit(self):
         inp = self.displayToArray()
-        print NN.forwardPropagation(inp)
+        digit = NN.forwardPropagation(inp)
+        print digit
+        maxi = np.amax(digit)
+        print maxi
+        print np.where (digit == maxi)[0][0]
 
     def clearDisplay(self):
         QtGui.QPixmapCache.clear()
@@ -123,8 +127,8 @@ if __name__ == "__main__":
     # NN = NeuralNet([3, 4, 2])
 
     training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
-    NN = NeuralNet ([784, 30, 10])
     # test = QtGui.QPixmap("mnistFile0.bmp")
+    NN = NeuralNet ([784, 30, 10])
     NN.SGD(training_data, 3, 10, 3.0, data_test=data_test)
     # obrazek = test.toImage()
     # obrazek.save("obrazekZGui.bmp", "BMP")
@@ -137,6 +141,6 @@ if __name__ == "__main__":
     # tablica = np.delete (tablica, 0, 0)
     # print NN.forwardPropagation(tablica)
     # /Obsluga sieci neuronowej
-    del training_data, validation_data, data_test
+    # del training_data, validation_data, data_test
     sys.exit(app.exec_())
             # print "Trzymasz"
