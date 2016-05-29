@@ -4,7 +4,8 @@ import sys
 from PyQt4 import QtCore, QtGui
 
 from mWindow import Ui_MainWindow
-
+import mnist_loader
+from ann import *
 
 class MyForm(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -16,7 +17,7 @@ class MyForm(QtGui.QMainWindow):
         self.ui.display.viewport().installEventFilter(self)
         self.initPainter()
         self.ui.clear.clicked.connect(self.clearDisplay)
-        self.ui.check.clicked.connect(self.displayToArray)
+        self.ui.check.clicked.connect(self.checkDigit)
         self.LeftButtonPressed = False
 
     def initPainter(self):
@@ -38,15 +39,20 @@ class MyForm(QtGui.QMainWindow):
 
     def displayToArray(self):
         obrazek = self.canvas.scaled(28,28).toImage()
-        sobrazek = obrazek.convertToFormat(QtGui.QImage.Format_Mono, flags = QtCore.Qt.MonoOnly)
+        # obrazek = obrazek.convertToFormat(QtGui.QImage.Format_Mono, flags = QtCore.Qt.MonoOnly)
         obrazek.save("obrazekZGui.bmp", "BMP")
-        for x in range(0, 28):
-            for y in range (0, 28):
+        tablica = np.array([np.zeros(1)])
+        for y in range(0, 28):
+            for x in range (0, 28):
                 pxl = obrazek.pixel(x,y)
                 color = QtGui.QColor(pxl).getRgbF()
-                print color
+                tablica = np.append(tablica, [[color[0]]], axis = 0)
+        tablica = np.delete (tablica, 0, 0)
+        return tablica
 
-
+    def checkDigit(self):
+        inp = self.displayToArray()
+        print NN.forwardPropagation(inp)
 
     def clearDisplay(self):
         QtGui.QPixmapCache.clear()
@@ -55,7 +61,7 @@ class MyForm(QtGui.QMainWindow):
         self.ui.display.setScene(self.scene)
 
     def drawCircle(self, point):
-        self.painter.drawEllipse(point.x(), point.y(), 20, 20)
+        self.painter.drawEllipse(point.x(), point.y(), 30, 30)
         self.scene.addPixmap(self.canvas)
         self.ui.display.setScene(self.scene)
 
@@ -66,7 +72,7 @@ class MyForm(QtGui.QMainWindow):
 
     # Obsługa klaiwatury
     def keyPressEvent (self, event):
-        print "Przycisk"
+        pass
 
     def drawLoop(self):
         pozycja = self.ui.display.mapFromGlobal(QtGui.QCursor.pos())
@@ -112,5 +118,25 @@ if __name__ == "__main__":
     # myapp.initTimer(20, Pos)
     # myapp.timer.start()
     # /Uzywanie timera
+    # Obsluga sieci neuronowej
+    # from ann import *
+    # NN = NeuralNet([3, 4, 2])
+
+    training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
+    NN = NeuralNet ([784, 30, 10])
+    # test = QtGui.QPixmap("mnistFile0.bmp")
+    NN.SGD(training_data, 3, 10, 3.0, data_test=data_test)
+    # obrazek = test.toImage()
+    # obrazek.save("obrazekZGui.bmp", "BMP")
+    # tablica = np.array([np.zeros(1)])
+    # for x in range(0, 28):
+    #     for y in range (0, 28):
+    #         pxl = obrazek.pixel(x,y)
+    #         color = QtGui.QColor(pxl).getRgbF()
+    #         tablica = np.append(tablica, [[color[0]]], axis = 0)
+    # tablica = np.delete (tablica, 0, 0)
+    # print NN.forwardPropagation(tablica)
+    # /Obsluga sieci neuronowej
+    del training_data, validation_data, data_test
     sys.exit(app.exec_())
             # print "Trzymasz"
