@@ -108,10 +108,10 @@ def writeMNISTimage(T):
         for x in range(0,28):
             for y in range(0,28):
                 pixels[x,y] = int(T[i][0][x+y*28]*255)
-        im.save('mnistFile'+str(i)+'.bmp')
+        im.save('data/mnistFile'+str(i)+'.bmp')
 
 # example of running the last function to write out some of the pictures.
-#writeMNISTimage(MNISTexample(0,2,only01=False))
+writeMNISTimage(MNISTexample(0,10000,bTrain = False ,only01=False))
 
 
 # This if my function to do the learning on the MNIST handwriting

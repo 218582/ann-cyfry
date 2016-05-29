@@ -7,6 +7,8 @@ from mWindow import Ui_MainWindow
 import mnist_loader
 from ann import *
 
+NUMBER_OF_PICTURE = 10000
+
 class MyForm(QtGui.QMainWindow):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -14,13 +16,15 @@ class MyForm(QtGui.QMainWindow):
         self.ui.setupUi(self)
         self.scene = QtGui.QGraphicsScene()
         self.show()
+        self.pictureNumber = 0
         self.ui.display.viewport().installEventFilter(self)
-        self.ui.clear.setEnabled(False)
-        self.ui.check.setEnabled(False)
+        self.displayMode()
+        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
+        self.ui.prv.clicked.connect(self.previousPicture)
+        self.ui.next.clicked.connect(self.nextPicture)
         self.ui.clear.clicked.connect(self.clearDisplay)
         self.ui.check.clicked.connect(self.checkDigit)
         self.ui.drawable.stateChanged.connect(self.changingMode)
-        self.LeftButtonPressed = False
 
     def initPainter(self):
         self.canvas = QtGui.QPixmap(420,420)
@@ -37,12 +41,11 @@ class MyForm(QtGui.QMainWindow):
 
     def displayImage(self, name):
         self.ui.display.resetCachedContent()
-        self.scene.addPixmap(QtGui.QPixmap(name).scaled(420,420))
+        self.scene.addPixmap(QtGui.QPixmap("data/" + name).scaled(420,420))
         self.ui.display.setScene(self.scene)
 
     def displayToArray(self):
         obrazek = self.canvas.scaled(28,28).toImage()
-        # obrazek = obrazek.convertToFormat(QtGui.QImage.Format_Mono, flags = QtCore.Qt.MonoOnly)
         obrazek.save("obrazekZGui.bmp", "BMP")
         tablica = np.array([np.zeros(1)])
         for y in range(0, 28):
@@ -56,7 +59,6 @@ class MyForm(QtGui.QMainWindow):
     def checkDigit(self):
         inp = self.displayToArray()
         digit = NN.forwardPropagation(inp)
-        print digit
         maxi = np.amax(digit)
         self.ui.certainty.setText("%.2f%%" % (maxi * 100))
         recognised = np.where (digit == maxi)[0][0]
@@ -67,6 +69,16 @@ class MyForm(QtGui.QMainWindow):
         self.canvas.fill(color = QtCore.Qt.black)
         self.scene.addPixmap(self.canvas)
         self.ui.display.setScene(self.scene)
+
+    def previousPicture(self):
+        self.pictureNumber -= 1
+        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
+        self.setButtons()
+
+    def nextPicture(self):
+        self.pictureNumber += 1
+        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
+        self.setButtons()
 
     def drawCircle(self, point):
         self.painter.drawEllipse(point.x(), point.y(), 30, 30)
@@ -85,22 +97,35 @@ class MyForm(QtGui.QMainWindow):
     def changingMode(self):
         if self.ui.drawable.isChecked():
             self.drawingMode()
+            self.initPainter()
         else:
             self.displayMode()
+            self.endPainter()
+
+    def setButtons(self):
+        if self.pictureNumber == 0:
+            self.ui.prv.setEnabled(False)
+            self.ui.next.setEnabled(True)
+        elif self.pictureNumber == NUMBER_OF_PICTURE:
+            self.ui.prv.setEnabled(True)
+            self.ui.next.setEnabled(False)
+        else:
+            self.ui.prv.setEnabled(True)
+            self.ui.next.setEnabled(True)
 
     def displayMode(self):
         self.ui.clear.setEnabled(False)
         self.ui.check.setEnabled(False)
-        self.ui.prv.setEnabled(True)
-        self.ui.next.setEnabled(True)
-        self.endPainter()
+        self.setButtons()
+        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
+
 
     def drawingMode(self):
         self.ui.clear.setEnabled(True)
         self.ui.check.setEnabled(True)
         self.ui.prv.setEnabled(False)
         self.ui.next.setEnabled(False)
-        self.initPainter()
+
 
     def drawLoop(self):
         pozycja = self.ui.display.mapFromGlobal(QtGui.QCursor.pos())
@@ -110,10 +135,8 @@ class MyForm(QtGui.QMainWindow):
     def eventFilter(self, source, event):
         if self.ui.drawable.isChecked():
             if event.type() == QtCore.QEvent.MouseButtonRelease and source is self.ui.display.viewport():
-                self.LeftButtonPressed = False
                 self.timer.stop()
             elif event.type() == QtCore.QEvent.MouseButtonPress and source is self.ui.display.viewport():
-                self.LeftButtonPressed = True
                 self.drawLoop()
                 self.initTimer(0,self.drawLoop)
                 self.timer.start()
