@@ -16,6 +16,7 @@ class MyForm(QtGui.QMainWindow):
         self.ui.display.viewport().installEventFilter(self)
         self.initPainter()
         self.ui.clear.clicked.connect(self.clearDisplay)
+        self.ui.check.clicked.connect(self.displayToArray)
         self.LeftButtonPressed = False
 
     def initPainter(self):
@@ -35,6 +36,18 @@ class MyForm(QtGui.QMainWindow):
         self.scene.addPixmap(QtGui.QPixmap(name).scaled(420,420))
         self.ui.display.setScene(self.scene)
 
+    def displayToArray(self):
+        obrazek = self.canvas.scaled(28,28).toImage()
+        sobrazek = obrazek.convertToFormat(QtGui.QImage.Format_Mono, flags = QtCore.Qt.MonoOnly)
+        obrazek.save("obrazekZGui.bmp", "BMP")
+        for x in range(0, 28):
+            for y in range (0, 28):
+                pxl = obrazek.pixel(x,y)
+                color = QtGui.QColor(pxl).getRgbF()
+                print color
+
+
+
     def clearDisplay(self):
         QtGui.QPixmapCache.clear()
         self.canvas.fill(color = QtCore.Qt.black)
@@ -50,13 +63,6 @@ class MyForm(QtGui.QMainWindow):
         self.timer = QtCore.QTimer()
         self.timer.setInterval(ms)
         QtCore.QObject.connect(self.timer, QtCore.SIGNAL("timeout()"), handler)
-
-    # def mousePressEvent(self, event):
-    #     if event.button() == QtCore.Qt.LeftButton:
-    #         self.LeftButtonPressed = True
-    #         self.drawLoop()
-    #         self.initTimer(0,self.drawLoop)
-    #         self.timer.start()
 
     # Obsługa klaiwatury
     def keyPressEvent (self, event):
