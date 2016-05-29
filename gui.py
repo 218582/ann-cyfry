@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 from PyQt4 import QtCore, QtGui
 
@@ -13,6 +15,7 @@ class MyForm(QtGui.QMainWindow):
         self.show()
         self.ui.display.viewport().installEventFilter(self)
         self.initPainter()
+        self.ui.clear.clicked.connect(self.clearDisplay)
         self.LeftButtonPressed = False
 
     def initPainter(self):
@@ -33,7 +36,9 @@ class MyForm(QtGui.QMainWindow):
         self.ui.display.setScene(self.scene)
 
     def clearDisplay(self):
-        self.scene.clear()
+        QtGui.QPixmapCache.clear()
+        self.canvas.fill(color = QtCore.Qt.black)
+        self.scene.addPixmap(self.canvas)
         self.ui.display.setScene(self.scene)
 
     def drawCircle(self, point):
@@ -46,12 +51,16 @@ class MyForm(QtGui.QMainWindow):
         self.timer.setInterval(ms)
         QtCore.QObject.connect(self.timer, QtCore.SIGNAL("timeout()"), handler)
 
-    def mousePressEvent(self, event):
-        if event.button() == QtCore.Qt.LeftButton:
-            self.LeftButtonPressed = True
-            self.drawLoop()
-            self.initTimer(0,self.drawLoop)
-            self.timer.start()
+    # def mousePressEvent(self, event):
+    #     if event.button() == QtCore.Qt.LeftButton:
+    #         self.LeftButtonPressed = True
+    #         self.drawLoop()
+    #         self.initTimer(0,self.drawLoop)
+    #         self.timer.start()
+
+    # Obsługa klaiwatury
+    def keyPressEvent (self, event):
+        print "Przycisk"
 
     def drawLoop(self):
         pozycja = self.ui.display.mapFromGlobal(QtGui.QCursor.pos())
@@ -62,6 +71,11 @@ class MyForm(QtGui.QMainWindow):
         if event.type() == QtCore.QEvent.MouseButtonRelease and source is self.ui.display.viewport():
             self.LeftButtonPressed = False
             self.timer.stop()
+        elif event.type() == QtCore.QEvent.MouseButtonPress and source is self.ui.display.viewport():
+            self.LeftButtonPressed = True
+            self.drawLoop()
+            self.initTimer(0,self.drawLoop)
+            self.timer.start()
         return QtGui.QWidget.eventFilter(self, source, event)
 
     def __del__(self):
