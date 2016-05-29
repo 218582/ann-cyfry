@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Sun May 29 23:21:49 2016
+# Created: Mon May 30 00:30:30 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.digit.setText(_fromUtf8(""))
         self.digit.setObjectName(_fromUtf8("digit"))
         self.certainty = QtGui.QLabel(self.centralwidget)
-        self.certainty.setGeometry(QtCore.QRect(520, 380, 66, 21))
+        self.certainty.setGeometry(QtCore.QRect(520, 380, 171, 21))
         font = QtGui.QFont()
         font.setPointSize(18)
         font.setBold(True)

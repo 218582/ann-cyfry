@@ -15,9 +15,11 @@ class MyForm(QtGui.QMainWindow):
         self.scene = QtGui.QGraphicsScene()
         self.show()
         self.ui.display.viewport().installEventFilter(self)
-        self.initPainter()
+        self.ui.clear.setEnabled(False)
+        self.ui.check.setEnabled(False)
         self.ui.clear.clicked.connect(self.clearDisplay)
         self.ui.check.clicked.connect(self.checkDigit)
+        self.ui.drawable.stateChanged.connect(self.changingMode)
         self.LeftButtonPressed = False
 
     def initPainter(self):
@@ -30,6 +32,7 @@ class MyForm(QtGui.QMainWindow):
         self.ui.display.setScene(self.scene)
 
     def endPainter(self):
+        self.isPainter = False
         self.painter.end()
 
     def displayImage(self, name):
@@ -55,8 +58,9 @@ class MyForm(QtGui.QMainWindow):
         digit = NN.forwardPropagation(inp)
         print digit
         maxi = np.amax(digit)
-        print maxi
-        print np.where (digit == maxi)[0][0]
+        self.ui.certainty.setText("%.2f%%" % (maxi * 100))
+        recognised = np.where (digit == maxi)[0][0]
+        self.ui.digit.setText(str(recognised) )
 
     def clearDisplay(self):
         QtGui.QPixmapCache.clear()
@@ -78,24 +82,46 @@ class MyForm(QtGui.QMainWindow):
     def keyPressEvent (self, event):
         pass
 
+    def changingMode(self):
+        if self.ui.drawable.isChecked():
+            self.drawingMode()
+        else:
+            self.displayMode()
+
+    def displayMode(self):
+        self.ui.clear.setEnabled(False)
+        self.ui.check.setEnabled(False)
+        self.ui.prv.setEnabled(True)
+        self.ui.next.setEnabled(True)
+        self.endPainter()
+
+    def drawingMode(self):
+        self.ui.clear.setEnabled(True)
+        self.ui.check.setEnabled(True)
+        self.ui.prv.setEnabled(False)
+        self.ui.next.setEnabled(False)
+        self.initPainter()
+
     def drawLoop(self):
         pozycja = self.ui.display.mapFromGlobal(QtGui.QCursor.pos())
         if pozycja.x() < myapp.ui.display.width() and pozycja.y() < myapp.ui.display.height():
             self.drawCircle(pozycja)
 
     def eventFilter(self, source, event):
-        if event.type() == QtCore.QEvent.MouseButtonRelease and source is self.ui.display.viewport():
-            self.LeftButtonPressed = False
-            self.timer.stop()
-        elif event.type() == QtCore.QEvent.MouseButtonPress and source is self.ui.display.viewport():
-            self.LeftButtonPressed = True
-            self.drawLoop()
-            self.initTimer(0,self.drawLoop)
-            self.timer.start()
+        if self.ui.drawable.isChecked():
+            if event.type() == QtCore.QEvent.MouseButtonRelease and source is self.ui.display.viewport():
+                self.LeftButtonPressed = False
+                self.timer.stop()
+            elif event.type() == QtCore.QEvent.MouseButtonPress and source is self.ui.display.viewport():
+                self.LeftButtonPressed = True
+                self.drawLoop()
+                self.initTimer(0,self.drawLoop)
+                self.timer.start()
         return QtGui.QWidget.eventFilter(self, source, event)
 
     def __del__(self):
-        self.endPainter()
+        if self.ui.drawable.isChecked():
+            self.endPainter()
 
 
 
@@ -126,10 +152,10 @@ if __name__ == "__main__":
     # from ann import *
     # NN = NeuralNet([3, 4, 2])
 
-    training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
+    # training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
     # test = QtGui.QPixmap("mnistFile0.bmp")
     NN = NeuralNet ([784, 30, 10])
-    NN.SGD(training_data, 3, 10, 3.0, data_test=data_test)
+    # NN.SGD(training_data, 1, 10, 3.0, data_test=data_test)
     # obrazek = test.toImage()
     # obrazek.save("obrazekZGui.bmp", "BMP")
     # tablica = np.array([np.zeros(1)])
