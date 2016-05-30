@@ -1,9 +1,9 @@
 # ann-cyfry
 
-- [ ] Sieć neuronowa
-- [ ] Python
-- [ ] Rozpoznawanie obrazów i protokół komunikacyjny z siecią neuronową
-- [ ] Prezentacja
+- [x] Sieć neuronowa
+- [x] Python
+- [x] Rozpoznawanie obrazów i protokół komunikacyjny z siecią neuronową
+- [x] Prezentacja
 
 
 [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
