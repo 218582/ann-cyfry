@@ -4,7 +4,7 @@
 ## Plik zawiera funkcje odczytu obrazków z bazy danych
 
 import mnistHandwriting as mh
-    
+
 ## Funkcja zwracająca tablicę cyfr z bazy danych, przypisaną do odpowiednich obrazków z bazy
 def readTrueValFromMNIST(mnistExampleReturn):
     trueValTable = []
@@ -17,7 +17,7 @@ def readTrueValFromMNIST(mnistExampleReturn):
     return trueValTable
 
 # Test readTrueValFromMNIST
-#print(readTrueValFromMNIST(mh.MNISTexample(0,3,bTrain=True,only01=False)))
+#print (readTrueValFromMNIST(mh.MNISTexample(0,3,bTrain=True,only01=False)))
 #mh.writeMNISTimage(mh.MNISTexample(0,3,only01=False))
 ## Porównaj stworzone pliki z wartościami wyświetlonymi na standardowym wyjściu
 
@@ -30,7 +30,7 @@ def readValueTableFromMNIST(mnistExampleReturn):
         trueValTable.append(trueVal)
     return trueValTable
 
-## Test readValueTableFromMNIST   
+## Test readValueTableFromMNIST
 #print(readValueTableFromMNIST(mh.MNISTexample(0,3,bTrain=True,only01=False)))
 
 ## Funkcja tworzy listę tablic 28x28 reprezentujących obrazki
@@ -46,7 +46,7 @@ def TableCreate(mnistExampleReturn):
         rotated_ccw = zip(*pixels)[::-1]
         alltabs.append(rotated_ccw)
     return alltabs
-    
+
 ## Funkcja tworzy listę list - listę wektorów długości 784, do łatwego podawania
 # dla neuronów wejściowych
 def VectorImage(mnistExampleReturn):
@@ -60,5 +60,5 @@ def VectorImage(mnistExampleReturn):
         allVectors.append(vectorI)
     return allVectors
 
-## przykład   
-#print(VectorImage(mh.MNISTexample(0,2,bTrain=True,only01=False)))
+## przykład - podobnie dla funkcji VectorImage
+#print(TableCreate(mh.MNISTexample(0,2,bTrain=True,only01=False)))
