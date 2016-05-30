@@ -6,7 +6,7 @@ from PyQt4 import QtCore, QtGui
 from mWindow import Ui_MainWindow
 import mnist_loader
 from ann import *
-
+import mnistHandwriting as mh
 NUMBER_OF_PICTURE = 10000
 
 class MyForm(QtGui.QMainWindow):
@@ -19,7 +19,6 @@ class MyForm(QtGui.QMainWindow):
         self.pictureNumber = 0
         self.ui.display.viewport().installEventFilter(self)
         self.displayMode()
-        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
         self.ui.prv.clicked.connect(self.previousPicture)
         self.ui.next.clicked.connect(self.nextPicture)
         self.ui.clear.clicked.connect(self.clearDisplay)
@@ -58,11 +57,14 @@ class MyForm(QtGui.QMainWindow):
 
     def checkDigit(self):
         inp = self.displayToArray()
+        self.convertVectorToDigits(inp)
+
+    def convertVectorToDigits(self, inp):
         digit = NN.forwardPropagation(inp)
         maxi = np.amax(digit)
         self.ui.certainty.setText("%.2f%%" % (maxi * 100))
         recognised = np.where (digit == maxi)[0][0]
-        self.ui.digit.setText(str(recognised) )
+        self.ui.digit.setText(str(recognised))
 
     def clearDisplay(self):
         QtGui.QPixmapCache.clear()
@@ -72,18 +74,22 @@ class MyForm(QtGui.QMainWindow):
 
     def previousPicture(self):
         self.pictureNumber -= 1
-        self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
-        self.setButtons()
+        self.updateDisplayAndStats()
 
     def nextPicture(self):
         self.pictureNumber += 1
+        self.updateDisplayAndStats()
+
+    def updateDisplayAndStats(self):
         self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
         self.setButtons()
+        data_part = mh.MNISTexample(self.pictureNumber, 1, bTrain = False, only01 = False)
+        self.convertVectorToDigits(mhToLoader(data_part[0][0]))
 
     def drawCircle(self, point):
         self.painter.drawEllipse(point.x(), point.y(), 30, 30)
         self.scene.addPixmap(self.canvas)
-        self.ui.display.setScene(self.scene)
+
 
     def initTimer(self, ms, handler):
         self.timer = QtCore.QTimer()
@@ -117,6 +123,7 @@ class MyForm(QtGui.QMainWindow):
         self.ui.clear.setEnabled(False)
         self.ui.check.setEnabled(False)
         self.setButtons()
+        self.updateDisplayAndStats()
         self.displayImage("mnistFile%i.bmp" % self.pictureNumber)
 
 
@@ -147,17 +154,27 @@ class MyForm(QtGui.QMainWindow):
             self.endPainter()
 
 
+## Funkcja zamienia dane pobieranie z mnistHandwriting na format przyjmowany prze
+# sieć neuronową.
+# \input mnist - tablica zawierajace dane TYLKO o obrazku
+#
+# \return tablica, które może zostac podana na wejscie sieci neuronowej
+def mhToLoader(mnist):
+    tablica = np.array([np.zeros(1)])
+    for index in range(0, len(mnist)):
+        tablica = np.append(tablica, [[mnist[index]]], axis = 0)
+    tablica = np.delete (tablica, 0, 0)
+    return tablica
+    # result = NN.forwardPropagation(tablica)
+    # maxi = np.amax(result)
+    # return np.where (result == maxi)[0][0]
 
-def Pos():
-    pozycja = myapp.ui.display.mapFromGlobal(QtGui.QCursor.pos())
-    if pozycja.x() < myapp.ui.display.width() and pozycja.y() < myapp.ui.display.height():
-        myapp.drawCircle(pozycja)
-
-def printClickedPos():
-    if QtGui.QMouseEvent.button() == QtCore.Qt.MouseButton.LeftButton:
-        print myapp.ui.display.mapFromGlobal(QtGui.QCursor.pos())
 
 if __name__ == "__main__":
+    NN = NeuralNet ([784, 30, 10])
+    data_part = mh.MNISTexample(0, 1, bTrain = False, only01 = False)
+    training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
+    NN.SGD(training_data, 1, 10, 3.0, data_test=data_test)
     app = QtGui.QApplication(sys.argv)
     myapp = MyForm()
     # #Rysowanie
@@ -174,11 +191,9 @@ if __name__ == "__main__":
     # Obsluga sieci neuronowej
     # from ann import *
     # NN = NeuralNet([3, 4, 2])
-
-    # training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
     # test = QtGui.QPixmap("mnistFile0.bmp")
-    NN = NeuralNet ([784, 30, 10])
-    # NN.SGD(training_data, 1, 10, 3.0, data_test=data_test)
+    # print inp.shape()
+    # print NN.forwardPropagation(inp)
     # obrazek = test.toImage()
     # obrazek.save("obrazekZGui.bmp", "BMP")
     # tablica = np.array([np.zeros(1)])
