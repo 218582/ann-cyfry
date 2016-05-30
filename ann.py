@@ -42,8 +42,10 @@ class NeuralNet(object):
     # \param [in] eta prędkość uczenia się sieci
     # \param [in] data_test dane do testu trafności przewidywań sieci (None - brak testu poprawności - domyśnie)
     def SGD(self, data_training, epochs, batch_size, eta, data_test=None):
+        plik = open("results.txt", "w")
         if data_test: n_test = len(data_test)
         n = len(data_training)
+        wyniki = []
         for j in xrange(epochs): #xrange() zwraca iterator (dla pythona 3.0 odpowiednikiem jest range())
             random.shuffle(data_training) #losowe przemieszanie danych treningowych
             #Podział danych na mniejsze kawałki aby przyspieszyć uczenie sieci
@@ -53,10 +55,16 @@ class NeuralNet(object):
             for batch in batches:
                 self.update_batch(batch, eta)
             if data_test:
+                self_eval = self.evaluation(data_test)
                 print "Epoka {0}: {1} / {2}".format(
-                    j, self.evaluation(data_test), n_test)
+                    j, self_eval, n_test)
+                wyniki.append(self_eval)
             else:
                 print "Epoka {0} ukończona".format(j)
+        for each in xrange(len(wyniki)):
+            wyniki[each] = 10000-wyniki[each]
+            plik.write(str(wyniki[each]) + "\n")
+        plik.close()
 
     ##Metoda aktualizująca wagi w sieci
     # \param [in] self wskaźnik na obiekt

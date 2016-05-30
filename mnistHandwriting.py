@@ -111,7 +111,7 @@ def writeMNISTimage(T):
         im.save('data/mnistFile'+str(i)+'.bmp')
 
 # example of running the last function to write out some of the pictures.
-# writeMNISTimage(MNISTexample(0,10000,bTrain = False ,only01=False))
+writeMNISTimage(MNISTexample(0,10000,bTrain = False ,only01=False))
 
 
 # This if my function to do the learning on the MNIST handwriting
