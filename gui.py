@@ -3,13 +3,14 @@
 import sys
 from PyQt4 import QtCore, QtGui
 
+from readWriteNetwork import *
 from mWindow import Ui_MainWindow
 import mnist_loader
 from ann import *
 import mnistHandwriting as mh
 NUMBER_OF_PICTURE = 10000
-EPOCS = 1
-shutdown (exit) can hang or segfault with daemon threads running
+EPOCS = 15
+
 class MyForm(QtGui.QMainWindow):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -20,6 +21,7 @@ class MyForm(QtGui.QMainWindow):
         self.pictureNumber = 0
         self.ui.display.viewport().installEventFilter(self)
         self.displayMode()
+        self.ui.actionZapisz_sie.triggered.connect(Zapisz)
         self.ui.actionWczytaj_wagi.triggered.connect(Wczytaj)
         self.ui.actionTrenuj.triggered.connect(Trenuj)
         self.ui.prv.clicked.connect(self.previousPicture)
@@ -176,7 +178,16 @@ def Trenuj():
     myapp.updateDisplayAndStats()
 
 def Wczytaj():
-    pass
+    if initFromFile(NN):
+        print "Wczytano sieć z pliku"
+        myapp.updateDisplayAndStats()
+    else:
+        print "Odczyt sieci neuronwej nie powiódł się "
+
+def Zapisz():
+    saveWeights(NN)
+    print "Zapisano sieć do pliku"
+    myapp.updateDisplayAndStats()
 
 if __name__ == "__main__":
     NN = NeuralNet ([784, 30, 10])
