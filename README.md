@@ -1,5 +1,10 @@
 # ann-cyfry
 
+#####Uruchamianie: python gui.py
+
+Aby wyświetlać obrazy z bazy mnist w gui należy uruchomić najpierw mnistHandwriting.py
+Wymagania: numpy
+
 - [x] Sieć neuronowa
 - [x] Python
 - [x] Rozpoznawanie obrazów i protokół komunikacyjny z siecią neuronową

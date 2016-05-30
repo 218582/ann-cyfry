@@ -45,4 +45,4 @@
 # sn.SGD(training_data, 1, 10, 3.0, test_data = test_data )
 # print test_data[0][0]
 # sn.feedforward(training_data[0][0].ravel())
-import gui
+# import gui
