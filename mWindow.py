@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Mon May 30 00:30:30 2016
+# Created: Mon May 30 03:55:27 2016
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -97,8 +97,11 @@ class Ui_MainWindow(object):
         self.actionTrenuj.setObjectName(_fromUtf8("actionTrenuj"))
         self.actionWczytaj_wagi = QtGui.QAction(MainWindow)
         self.actionWczytaj_wagi.setObjectName(_fromUtf8("actionWczytaj_wagi"))
+        self.actionZapisz_sie = QtGui.QAction(MainWindow)
+        self.actionZapisz_sie.setObjectName(_fromUtf8("actionZapisz_sie"))
         self.menuSie_neuronowa.addAction(self.actionTrenuj)
         self.menuSie_neuronowa.addAction(self.actionWczytaj_wagi)
+        self.menuSie_neuronowa.addAction(self.actionZapisz_sie)
         self.menubar.addAction(self.menuSie_neuronowa.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -115,5 +118,6 @@ class Ui_MainWindow(object):
         self.next.setText(_translate("MainWindow", "Nastepny", None))
         self.menuSie_neuronowa.setTitle(_translate("MainWindow", "Sieć neuronowa", None))
         self.actionTrenuj.setText(_translate("MainWindow", "Trenuj", None))
-        self.actionWczytaj_wagi.setText(_translate("MainWindow", "Wczytaj wagi", None))
+        self.actionWczytaj_wagi.setText(_translate("MainWindow", "Wczytaj sieć", None))
+        self.actionZapisz_sie.setText(_translate("MainWindow", "Zapisz sieć", None))
 

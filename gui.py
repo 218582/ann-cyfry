@@ -8,7 +8,8 @@ import mnist_loader
 from ann import *
 import mnistHandwriting as mh
 NUMBER_OF_PICTURE = 10000
-
+EPOCS = 1
+shutdown (exit) can hang or segfault with daemon threads running
 class MyForm(QtGui.QMainWindow):
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
@@ -19,6 +20,8 @@ class MyForm(QtGui.QMainWindow):
         self.pictureNumber = 0
         self.ui.display.viewport().installEventFilter(self)
         self.displayMode()
+        self.ui.actionWczytaj_wagi.triggered.connect(Wczytaj)
+        self.ui.actionTrenuj.triggered.connect(Trenuj)
         self.ui.prv.clicked.connect(self.previousPicture)
         self.ui.next.clicked.connect(self.nextPicture)
         self.ui.clear.clicked.connect(self.clearDisplay)
@@ -165,16 +168,19 @@ def mhToLoader(mnist):
         tablica = np.append(tablica, [[mnist[index]]], axis = 0)
     tablica = np.delete (tablica, 0, 0)
     return tablica
-    # result = NN.forwardPropagation(tablica)
-    # maxi = np.amax(result)
-    # return np.where (result == maxi)[0][0]
 
+def Trenuj():
+    training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
+    NN.SGD(training_data, EPOCS, 10, 3.0, data_test=data_test)
+    print "Zakończono trening sieci neuronowej"
+    myapp.updateDisplayAndStats()
+
+def Wczytaj():
+    pass
 
 if __name__ == "__main__":
     NN = NeuralNet ([784, 30, 10])
-    data_part = mh.MNISTexample(0, 1, bTrain = False, only01 = False)
-    training_data, validation_data, data_test = mnist_loader.load_data_wrapper()
-    NN.SGD(training_data, 1, 10, 3.0, data_test=data_test)
+    # data_part = mh.MNISTexample(0, 1, bTrain = False, only01 = False)
     app = QtGui.QApplication(sys.argv)
     myapp = MyForm()
     # #Rysowanie
@@ -207,4 +213,3 @@ if __name__ == "__main__":
     # /Obsluga sieci neuronowej
     # del training_data, validation_data, data_test
     sys.exit(app.exec_())
-            # print "Trzymasz"
